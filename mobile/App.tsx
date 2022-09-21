@@ -4,7 +4,6 @@ import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold, Inter_900
 import { Loading } from './src/components/Loading';
 import { Routes } from './src/routes';
 
-
 export default function App() {
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -16,7 +15,7 @@ export default function App() {
   return (
     <Background>
       <StatusBar barStyle={'light-content'} backgroundColor='transparent' translucent />
-      { fontsLoaded ? <Routes /> : <Loading /> }
+      {fontsLoaded ? <Routes /> : <Loading />}
     </Background>
   );
 }
