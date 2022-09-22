@@ -4,9 +4,9 @@
 
 ## Sobre
 
-O projeto findYourDuo foi desenvolvido na Next Level Week eSports na trilha ignite. Esse é um evento incrível que sempre traz projetos inéditos, além da intensa rotina de estudos no desenvolvimento da aplicação, muitas conexões, networking, trabalho com a comunidade e desafios de codigo para novas features.
+O projeto findYourDuo foi desenvolvido na Next Level Week eSports na trilha ignite. Esse é um evento da Rocketseat que sempre traz projetos inéditos, além da intensa rotina de estudos no desenvolvimento da aplicação, muitas conexões, networking, trabalho com a comunidade e desafios de codigo para novas features.
 
-O projeto é desenvolvido para mobile, web e conta com um backend próprio, tornando-o um projeto full-stack. O principal objetivo da aplicação é criar um sistema para descobrir novas pessoas que jogam os mesmos jogos online que você. Dessa forma, é possível criar um anúncio de um determinado jogo, com os horários e dias que você costuma jogar e com seu nick do Discord. Caso alguém tenha afinidade nas informações do seu anúncio, ela poderá entrar em contato com você pelo Discord e poderão jogar juntos.
+O projeto é desenvolvido para mobile, web e conta com um backend próprio, tornando-o um projeto full-stack. O principal objetivo da aplicação é te ajudar descobrir novas pessoas que jogam os mesmos jogos online que você. Dessa forma, é possível criar um anúncio de um determinado jogo, com os horários e dias que você costuma jogar e com seu nick do Discord. Caso alguém tenha afinidade nas informações do seu anúncio, ela poderá entrar em contato com você pelo Discord e poderão jogar juntos.
 
 
 ## Layout
@@ -18,7 +18,6 @@ O projeto é desenvolvido para mobile, web e conta com um backend próprio, torn
 </div>
 
 ## Tecnologias
-
 Foram usadas as tecnologias e ferramentas abaixo:
 
 * [React](https://reactjs.org/)
