@@ -1,13 +1,20 @@
+import { useEffect, useState } from 'react';
+import { Input } from './Form/Input';
+import { WeekButton } from './Form/WeekButton';
+import { SelectCustom } from './Form/SelectCustom';
+import { api } from '../services/api';
+
+import { Check, GameController } from 'phosphor-react';
+import toast from 'react-hot-toast';
+
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 
-import { Check, GameController } from 'phosphor-react';
-import { Input } from './Form/Input';
-import { WeekButton } from './Form/WeekButton';
-import { FormEvent, useEffect, useState } from 'react';
-import { api } from '../services/api';
-import { toast } from 'react-toastify';
+import * as yup from "yup";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { MessageInputRequired } from './Form/MessageInputRequired';
 
 interface Game {
     id: string;
@@ -18,8 +25,17 @@ interface CreateAdModalProps {
     setOpen: (openModal: boolean) => void;
 }
 
+const CreateAdSchema = yup.object().shape({
+    name: yup.string().required('Campo obrigatório'),
+    yearsPlaying: yup.string().required('Campo obrigatório'),
+    discord: yup.string().required('Campo obrigatório'),
+    hourStart: yup.string().required(),
+    hourEnd: yup.string().required(),
+})
+
 export function CreateAdModal({ setOpen }: CreateAdModalProps) {
     const [games, setGames] = useState<Game[]>([]);
+    const [game, setGame] = useState('');
     const [weekDays, setWeekDays] = useState<string[]>([]);
     const [useVoidChannel, setUseVoidChannel] = useState(false);
 
@@ -27,21 +43,21 @@ export function CreateAdModal({ setOpen }: CreateAdModalProps) {
         api.get('/games').then(resp => setGames(resp.data));
     }, []);
 
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+        resolver: yupResolver(CreateAdSchema)
+    });
+
     function clearForm() {
         setOpen(false);
         setWeekDays([]);
         setUseVoidChannel(false);
+        reset();
     }
 
-    async function handleCreateAd(event: FormEvent) {
-        event.preventDefault();
-
-        const formData = new FormData(event.target as HTMLFormElement);
-
-        const data = Object.fromEntries(formData);
-
-        if (!data.name) {
-            return;
+    async function handleCreateAd(data: any) {
+        data = {
+            ...data,
+            game,
         }
 
         try {
@@ -55,10 +71,23 @@ export function CreateAdModal({ setOpen }: CreateAdModalProps) {
                 useVoidChannel: useVoidChannel
             });
 
-            toast.success("Anúncio criado com sucesso!");
-
+            toast.success('Anúncio criado com sucesso!', {
+                style: {
+                    border: '1px solid green',
+                    padding: '12px',
+                    color: '#fff',
+                    background: '#333',
+                },
+            })
         } catch (err) {
-            toast.error('Erro ao criar o anúncio!');
+            toast.error('Erro ao criar o anúncio!!', {
+                style: {
+                    border: '1px solid red',
+                    padding: '12px',
+                    color: '#fff',
+                    background: '#333',
+                },
+            })
         }
 
         clearForm();
@@ -66,42 +95,34 @@ export function CreateAdModal({ setOpen }: CreateAdModalProps) {
 
     return (
         <Dialog.Portal>
-            <Dialog.Overlay className='bg-black/60 inset-0 fixed' />
+            <Dialog.Overlay className='bg-black/60 inset-0 fixed z-[2]' />
 
-            <Dialog.Content className='fixed bg-[#2A2634] py-8 px-10 text-white rounded-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[496px] shadow-black/25'>
-                <Dialog.Title className='text-3xl font-black'>Publique seu anúncio</Dialog.Title>
+            <Dialog.Content className='fixed flex flex-col justify-center bg-[#2A2634] px-10 text-white rounded-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[98vh] shadow-black/25 z-[2]'>
+                <Dialog.Title className='text-[1.6rem] font-black text-center'>Publique seu anúncio</Dialog.Title>
 
-                <form onSubmit={handleCreateAd} className='mt-8 flex flex-col gap-4'>
+                <form onSubmit={handleSubmit(handleCreateAd)} className='mt-3 flex flex-col gap-4'>
                     <div className='flex flex-col gap-2'>
-                        <label htmlFor="game" className='font-semibold'>Qual o game?</label>
-                        <select
-                            id='game'
-                            name='game'
-                            defaultValue=''
-                            className='bg-zinc-900 py-3 px-4 rounded text-sm placeholder:text-zinc-500 appearance-none'
-                        >
-                            <option disabled value="">Selecione o game que deseja jogar</option>
-
-                            {games.map(game => (
-                                <option key={game.id} value={game.id}>{game.title}</option>
-                            ))}
-                        </select>
+                        <label htmlFor="game">Qual o game?</label>
+                        <SelectCustom value={game} setValue={setGame} games={games} />
                     </div>
 
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="name">Seu nome (ou nickname)</label>
-                        <Input id='name' name='name' placeholder='Como te chamam dentro do game?' />
+                        <Input {...register("name")} id='name' placeholder='Como te chamam dentro do game?' />
+                        <MessageInputRequired message={errors.name?.message as string} />
                     </div>
 
                     <div className='grid grid-cols-2 gap-6'>
                         <div className='flex flex-col gap-2'>
                             <label htmlFor="yearsPlaying">Joga há quantos anos?</label>
-                            <Input id='yearsPlaying' name='yearsPlaying' type='number' placeholder='Tudo bem ser ZERO' />
+                            <Input {...register('yearsPlaying')} id='yearsPlaying' type='number' placeholder='Tudo bem ser ZERO' />
+                            <MessageInputRequired message={errors.yearsPlaying?.message as string} />
                         </div>
 
                         <div className='flex flex-col gap-2'>
                             <label htmlFor="discord">Qual seu Discord?</label>
-                            <Input id='discord' name='discord' placeholder='Usuario#0000' />
+                            <Input {...register('discord')} id='discord' placeholder='Usuario#0000' />
+                            <MessageInputRequired message={errors.discord?.message as string} />
                         </div>
                     </div>
 
@@ -128,9 +149,10 @@ export function CreateAdModal({ setOpen }: CreateAdModalProps) {
                         <div className='flex flex-col gap-2 flex-1'>
                             <label htmlFor="hourStart">Qual horário do dia?</label>
                             <div className='grid grid-cols-2 gap-2'>
-                                <Input id='hourStart' name='hourStart' type='time' placeholder='De' />
-                                <Input id='hourEnd' name='hourEnd' type='time' placeholder='Até' />
+                                <Input {...register('hourStart')} id='hourStart' name='hourStart' type='time' placeholder='De' />
+                                <Input {...register('hourEnd')} id='hourEnd' name='hourEnd' type='time' placeholder='Até' />
                             </div>
+                            {(errors.hourStart?.message || errors.hourEnd?.message) && <MessageInputRequired message={'Campo obrigatório'} />}
                         </div>
                     </div>
 
@@ -153,7 +175,7 @@ export function CreateAdModal({ setOpen }: CreateAdModalProps) {
                         Costumo me conectar ao chat de voz
                     </label>
 
-                    <footer className='mt-4 flex justify-end gap-4'>
+                    <footer className='mt-2 flex justify-end gap-4'>
                         <Dialog.Close type='button' className='bg-zinc-500 px-5 h-12 rounded-md font-semibold transition-all hover:bg-zinc-600'>Cancelar</Dialog.Close>
                         <button
                             type='submit'
@@ -163,7 +185,6 @@ export function CreateAdModal({ setOpen }: CreateAdModalProps) {
                             Encontrar duo
                         </button>
                     </footer>
-
                 </form>
             </Dialog.Content>
         </Dialog.Portal>
