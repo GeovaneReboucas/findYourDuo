@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+div.swiper-button-prev,
+div.swiper-button-next {
+   color: #fff;
+}
+
+
+::-webkit-scrollbar {
+   width:10px;
+   height: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+   background: #333;
+}
+ 
+::-webkit-scrollbar-thumb {
+   background: #fff;
+}
