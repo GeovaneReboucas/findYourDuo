@@ -40,10 +40,14 @@ export function GamesCarousel({ games }: GamesCarouselProps) {
                 loop
                 breakpoints={{
                     0: {
-                        slidesPerView: 2,
+                        slidesPerView: 1,
                         spaceBetween: 20,
                     },
-                    400: {
+                    350: {
+                        slidesPerView: 2,
+                        spaceBetween: 15,
+                    },
+                    465: {
                         slidesPerView: 3,
                         spaceBetween: 20,
                     },

@@ -28,16 +28,16 @@ function App() {
   }, []);
 
   return (
-    <div className='max-w-5xl mx-auto flex flex-col items-center my-12'>
+    <div className='max-w-5xl mx-auto flex flex-col items-center my-12 px-8'>
       <div>
         <Toaster
           position="top-right"
           reverseOrder={false}
         />
       </div>
-      <img src={logoImg} alt="Logo NLW eSports" />
+      <img src={logoImg} alt="Logo NLW eSports" className='h-28 sm:h-auto' />
 
-      <h1 className='text-6xl text-white font-black mt-10'>
+      <h1 className='text-4xl sm:text-5xl text-center text-white font-black mt-10'>
         Seu <span className='text-transparent bg-nlw-gradient bg-clip-text'>duo</span> está aqui.
       </h1>
 

@@ -97,7 +97,7 @@ export function CreateAdModal({ setOpen }: CreateAdModalProps) {
         <Dialog.Portal>
             <Dialog.Overlay className='bg-black/60 inset-0 fixed z-[2]' />
 
-            <Dialog.Content className='fixed flex flex-col justify-center bg-[#2A2634] px-10 text-white rounded-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[98vh] shadow-black/25 z-[2]'>
+            <Dialog.Content className='fixed flex flex-col justify-center bg-[#2A2634] px-10 text-white rounded-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] sm:w-[520px] h-[98vh] shadow-black/25 z-[2] overflow-y-auto'>
                 <Dialog.Title className='text-[1.6rem] font-black text-center'>Publique seu anúncio</Dialog.Title>
 
                 <form onSubmit={handleSubmit(handleCreateAd)} className='mt-3 flex flex-col gap-4'>
